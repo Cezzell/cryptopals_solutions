@@ -13,7 +13,6 @@ public class CryptoToolFunctions {
 	 * @return - String converted to Base64 encoding
 	 * 
 	 */
-		System.out.println("Hex String: " + hex);
 		
 		Hex decoder = new Hex();
 		
@@ -31,13 +30,43 @@ public class CryptoToolFunctions {
 		
 		String DecodedString = new String(DecodedBytes);
 		
-		System.out.println("Hex String Decoded: " + DecodedString);
-		
 		String B64Encoded = Base64.getEncoder().encodeToString(DecodedBytes);
-		
-		System.out.println("Base64 Encoded String: " + B64Encoded);
 		
 		return B64Encoded;
 	}
+	
+	public static String FixedXOR(String Buffer1, String Buffer2) throws Exception {
+		/*
+		 * @arguments - two buffers which are hex strings of equal length
+		 * @return - XOR'd bytes of the two hex strings
+		 * 
+		 * 
+		 */
+		
+		
+		byte[] bytes1 = null;
+		byte[] bytes2 = null;
+		
+		try {
+			bytes1 = Hex.decodeHex(Buffer1);
+			bytes2 = Hex.decodeHex(Buffer2);
+		}
+		catch(Exception e) {
+			System.out.println("Error in hex decoding:");
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		byte[] bytesXor = new byte[bytes1.length];
+		
+		for(int i = 0; i < bytesXor.length; i++) {
+			bytesXor[i] = (byte) (bytes1[i] ^ bytes2[i]);
+		}
+		
+		String answer = Hex.encodeHexString(bytesXor);
+		
+		return answer;
+	}
+
 
 }
