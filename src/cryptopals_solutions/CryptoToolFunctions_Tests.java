@@ -25,8 +25,15 @@ class CryptoToolFunctions_Tests {
 		String Buffer2 = "686974207468652062756c6c277320657965";
 		String Check = "746865206b696420646f6e277420706c6179";
 		String Xor = Tools.FixedXOR(Buffer1, Buffer2);
-		assertEquals(Xor,Check);
-		
+		assertEquals(Xor,Check);	
+	}
+	
+	@Test
+	public void PlaintextFrequencyScore_Test() {
+		String TestString = "Each word accounted for.";
+		int ActualScore = 117;
+		int Score = Tools.PlaintextFrequencyScore(TestString);
+		assertEquals(ActualScore,Score);
 	}
 	
 }
