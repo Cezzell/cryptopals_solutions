@@ -36,4 +36,13 @@ class CryptoToolFunctions_Tests {
 		assertEquals(ActualScore,Score);
 	}
 	
+	@Test
+	public void CreateSingleKeyString_Test() {
+		byte a = 'a';
+		int size = 10;
+		String ActualString = "aaaaaaaaaa";
+		String TestString = Tools.CreateSingleKeyString(a, size);
+		assertEquals(ActualString, TestString);
+	}
+	
 }

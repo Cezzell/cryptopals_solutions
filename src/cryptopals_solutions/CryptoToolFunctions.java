@@ -124,6 +124,28 @@ public class CryptoToolFunctions {
 		
 		return TotalValue;
 	}
-
+	
+	public static String CreateSingleKeyString(byte key, int length) {
+		
+		// Create character Array for creating strings of characters
+		byte[] CipherArray = new byte[length];
+		
+		
+		// Fill array with specified character
+		for(int i = 0; i < CipherArray.length; i++) {
+			CipherArray[i] = key;
+		}
+		
+		// Convert to String and return
+		String KeyString = new String(CipherArray);
+		return KeyString;	
+	}
+	
+	public static String CovertBytesToHex(byte[] bytes) {
+		
+		// Convert an array of bytes to a hex string and returns
+		String HexString = CovertBytesToHex(bytes);
+		return HexString;
+	}
 
 }
