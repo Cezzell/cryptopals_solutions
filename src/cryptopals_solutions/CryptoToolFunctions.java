@@ -10,38 +10,40 @@ public class CryptoToolFunctions {
 	/*
 	 * This Hashmap represents the character frequencies for the english language.
 	 * 
-	 * Src: https://www3.nd.edu/~busiforc/handouts/cryptography/letterfrequencies.html
+	 * Src: https://en.wikipedia.org/wiki/Letter_frequency
 	 * 
+	 * Space value was increased until correct plaintext was found
 	 */
 	private static final HashMap<Character,Integer> FrequencyMap;
 		static {
 			FrequencyMap = new HashMap<Character,Integer>(); 
-			FrequencyMap.put('a', 8);
-			FrequencyMap.put('b', 2);
-			FrequencyMap.put('c', 4);
-			FrequencyMap.put('d', 3);
-			FrequencyMap.put('e', 11);
-			FrequencyMap.put('f', 2);
-			FrequencyMap.put('g', 2);
-			FrequencyMap.put('h', 3);
-			FrequencyMap.put('i', 8);
-			FrequencyMap.put('j', 1);
-			FrequencyMap.put('k', 1);
-			FrequencyMap.put('l', 5);
-			FrequencyMap.put('m', 3);
-			FrequencyMap.put('n', 7);
-			FrequencyMap.put('o', 7);
-			FrequencyMap.put('p', 3);
-			FrequencyMap.put('q', 1);
-			FrequencyMap.put('r', 8);
-			FrequencyMap.put('s', 6);
-			FrequencyMap.put('t', 7);
-			FrequencyMap.put('u', 4);
-			FrequencyMap.put('v', 1);
-			FrequencyMap.put('w', 1);
-			FrequencyMap.put('x', 1);
-			FrequencyMap.put('y', 2);
-			FrequencyMap.put('z', 1);
+			FrequencyMap.put('a', 820);
+			FrequencyMap.put('b', 150);
+			FrequencyMap.put('c', 280);
+			FrequencyMap.put('d', 430);
+			FrequencyMap.put('e', 1300);
+			FrequencyMap.put('f', 220);
+			FrequencyMap.put('g', 200);
+			FrequencyMap.put('h', 610);
+			FrequencyMap.put('i', 700);
+			FrequencyMap.put('j', 15);
+			FrequencyMap.put('k', 77);
+			FrequencyMap.put('l', 400);
+			FrequencyMap.put('m', 240);
+			FrequencyMap.put('n', 670);
+			FrequencyMap.put('o', 750);
+			FrequencyMap.put('p', 190);
+			FrequencyMap.put('q', 9);
+			FrequencyMap.put('r', 600);
+			FrequencyMap.put('s', 630);
+			FrequencyMap.put('t', 910);
+			FrequencyMap.put('u', 280);
+			FrequencyMap.put('v', 98);
+			FrequencyMap.put('w', 240);
+			FrequencyMap.put('x', 15);
+			FrequencyMap.put('y', 200);
+			FrequencyMap.put('z', 7);
+			FrequencyMap.put(' ', 300);
 		}
 		
 		// Initialize a hex object for decoding
@@ -125,7 +127,7 @@ public class CryptoToolFunctions {
 		return TotalValue;
 	}
 	
-	public static String CreateSingleKeyString(byte key, int length) {
+	public static String CreateSingleKeyHexString(byte key, int length) {
 		
 		// Create character Array for creating strings of characters
 		byte[] CipherArray = new byte[length];
@@ -137,15 +139,33 @@ public class CryptoToolFunctions {
 		}
 		
 		// Convert to String and return
-		String KeyString = new String(CipherArray);
+		String KeyString = ConvertBytesToHex(CipherArray);
 		return KeyString;	
 	}
 	
-	public static String CovertBytesToHex(byte[] bytes) {
+	public static String ConvertBytesToHex(byte[] bytes) {
 		
 		// Convert an array of bytes to a hex string and returns
-		String HexString = CovertBytesToHex(bytes);
+		String HexString = Hex.encodeHexString(bytes);
 		return HexString;
+	}
+	
+	public static String ConvertHexStringToPlaintext(String HexString) throws Exception {
+		
+		byte[] PlainBytes = new byte[HexString.length()];
+		String Plaintext;
+		
+		try {
+		PlainBytes = Hex.decodeHex(HexString);
+		}
+		catch(Exception e) {
+			System.out.println("Error in hex decoding:");
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		Plaintext = new String(PlainBytes);
+		return Plaintext;
 	}
 
 }

@@ -31,7 +31,7 @@ class CryptoToolFunctions_Tests {
 	@Test
 	public void PlaintextFrequencyScore_Test() {
 		String TestString = "Each word accounted for.";
-		int ActualScore = 117;
+		int ActualScore = 126;
 		int Score = Tools.PlaintextFrequencyScore(TestString);
 		assertEquals(ActualScore,Score);
 	}
@@ -40,9 +40,10 @@ class CryptoToolFunctions_Tests {
 	public void CreateSingleKeyString_Test() {
 		byte a = 'a';
 		int size = 10;
-		String ActualString = "aaaaaaaaaa";
-		String TestString = Tools.CreateSingleKeyString(a, size);
+		String ActualString = "61616161616161616161";
+		String TestString = Tools.CreateSingleKeyHexString(a, size);
 		assertEquals(ActualString, TestString);
 	}
+	
 	
 }
