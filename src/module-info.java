@@ -2,7 +2,7 @@
  * 
  */
 /**
- * @author ezzel
+ * @author Cezzell
  *
  */
 module cryptopals_solutions {
