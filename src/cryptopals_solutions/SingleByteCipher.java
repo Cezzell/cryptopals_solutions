@@ -56,22 +56,62 @@ public class SingleByteCipher {
 		 return Tools.ConvertHexStringToPlaintext(Plaintext);
 	}
 	
+public static Integer SolveSingleCipherReturnScore(String Ciphertext) throws Exception {
+		
+		int length = Ciphertext.length();
+		length = length/2;
+		
+		int maxScore = 0;
+		int maxIndex = 0;
+		int currentScore;
+		
+		String KeyString;
+		String Plaintext;
+		
+		byte[] keys = new byte[256];
+		
+		for(Integer i = 0; i < 256; i++) {
+			keys[i] = i.byteValue();
+		}
+		
+		for(int j = 0; j< 256; j++) {
+			KeyString = Tools.CreateSingleKeyHexString(keys[j], length);
+			Plaintext = Tools.FixedXOR(KeyString, Ciphertext);
+			Plaintext = Tools.ConvertHexStringToPlaintext(Plaintext);
+			currentScore = Tools.PlaintextFrequencyScore(Plaintext);
+			
+			if(currentScore > maxScore) {
+				maxScore = currentScore;
+				maxIndex = j;
+			}
+		}
+		 return maxScore;
+	}
+
 	public static void DetectSingleKeyCipherFromFile() throws Exception {
 		
-		int lineNumber = 1;
+		int highestScoreIndex = 0;
 		int highestScore = 0;
-		String Ciphertext;
-		String Plaintext;
+		int currentScore = 0;
+		int currentIndex = 0;
+		
 		String line;
+		String Ciphertext = null;
 		
 		BufferedReader Reader = new BufferedReader( new FileReader("/Users/ezzel/eclipse-workspace/cryptopals_solutions/src/SingleByteCiphers.txt"));
 		
 		try {
 		  line = Reader.readLine();
+		  currentIndex++;
 		  while (line!=null){
-			  System.out.println("Guessed Plaintext of Line "+ lineNumber +": " + SolveSingleCipher(line));
-			  lineNumber++;
-			  line = Reader.readLine();
+			 currentScore = SolveSingleCipherReturnScore(line);
+			 if(currentScore>highestScore) {
+				 highestScoreIndex = currentIndex;
+				 Ciphertext = line;
+				 highestScore = currentScore;
+			 }
+			 line = Reader.readLine();
+			 currentIndex++;
 		  }
 		}
 		catch(IOException e) {
@@ -79,7 +119,7 @@ public class SingleByteCipher {
 			System.exit(1);
 		}
 		
-		//String line = FileRead.read(null)
+		System.out.println("Highest Scoring Plaintext Line: " + highestScoreIndex +"\nTranslated Plaintext: " + SolveSingleCipher(Ciphertext));
 	}
 
 }
