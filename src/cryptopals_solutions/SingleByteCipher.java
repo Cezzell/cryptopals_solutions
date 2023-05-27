@@ -16,8 +16,7 @@ public class SingleByteCipher {
 		//Test Scenario for solving single key cipher
 		//String CipherText = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
 		//System.out.println("Best Guess at Text: \n" + SolveSingleCipher(CipherText));
-		
-		DetectSingleKeyCipherFromFile();
+		//DetectSingleKeyCipherFromFile();
 	}
 	
 	public static String SolveSingleCipher(String Ciphertext) throws Exception {
