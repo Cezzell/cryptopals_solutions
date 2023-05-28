@@ -192,5 +192,14 @@ public class CryptoToolFunctions {
 		Plaintext = new String(PlainBytes);
 		return Plaintext;
 	}
+	
+	public static String ConvertPlaintextToHexString(String Plaintext) throws Exception{
+		
+		byte [] plainBytes = Plaintext.getBytes();
+		String HexString = ConvertBytesToHex(plainBytes);
+		
+		return HexString;
+	}
+
 
 }
