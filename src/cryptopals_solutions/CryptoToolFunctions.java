@@ -134,13 +134,38 @@ public class CryptoToolFunctions {
 		
 		
 		// Fill array with specified character
-		for(int i = 0; i < CipherArray.length; i++) {
+		for(int i = 0; i < length; i++) {
 			CipherArray[i] = key;
 		}
 		
 		// Convert to String and return
 		String KeyString = ConvertBytesToHex(CipherArray);
 		return KeyString;	
+	}
+	
+	public static String CreateRepeatingKeyHexString(byte[] keyBytes, int length) {
+		
+		// Determine length of Key
+		int keyLength = keyBytes.length;
+		
+		//Initialize counter for key bytes
+		int currentKeyByte = 0;
+		
+		// Initialize byte array for working with string
+		byte[] CipherArray = new byte[length];
+		
+		// Fill Array with Key byte by byte
+		for(int i = 0; i < length; i++) {
+			CipherArray[i] = keyBytes[currentKeyByte];
+			currentKeyByte ++;
+			if(currentKeyByte == keyLength) {
+				currentKeyByte = 0;
+			}
+		}
+		
+		// Convert to String and Return
+		String keyString = ConvertBytesToHex(CipherArray);
+		return keyString;
 	}
 	
 	public static String ConvertBytesToHex(byte[] bytes) {

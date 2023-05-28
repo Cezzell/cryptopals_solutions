@@ -38,12 +38,23 @@ class CryptoToolFunctions_Tests {
 	
 	@Test
 	public void CreateSingleKeyHexString_Test() {
-		byte a = 'a';
+		byte key = 'a';
 		int size = 10;
 		String ActualString = "61616161616161616161";
-		String TestString = Tools.CreateSingleKeyHexString(a, size);
+		String TestString = Tools.CreateSingleKeyHexString(key, size);
 		assertEquals(ActualString, TestString);
 	}
 	
+	@Test
+	public void CreateRepeatingKeyHexString_Test() {
+		byte[] key = new byte[3];
+		key[0] = 'I';
+		key[1] = 'C';
+		key[2] = 'E';
+		int size = 12;
+		String ActualString = "494345494345494345494345";
+		String TestString = Tools.CreateRepeatingKeyHexString(key, size);
+		assertEquals(ActualString, TestString);
+	}
 	
 }
