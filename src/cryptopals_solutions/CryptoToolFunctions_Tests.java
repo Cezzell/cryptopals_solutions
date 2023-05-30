@@ -57,4 +57,17 @@ class CryptoToolFunctions_Tests {
 		assertEquals(ActualString, TestString);
 	}
 	
+	@Test
+	public void ComputeHammingDistance_Test() throws Exception {
+		String Buffer1 = "this is a test";
+		String Buffer2 = "wokka wokka!!!";
+		int HammingDistance;
+		HammingDistance = Tools.ComputeHammingDistance(Buffer1, Buffer2);
+		
+		System.out.println("Calculated Hamming Distance: " + HammingDistance);
+		assertEquals(HammingDistance, 37);
+		
+		
+	}
+	
 }

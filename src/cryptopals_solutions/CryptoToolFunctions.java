@@ -200,6 +200,54 @@ public class CryptoToolFunctions {
 		
 		return HexString;
 	}
+	
+	public static int ComputeHammingDistance(String Buffer1, String Buffer2) throws Exception {
+		
+		// Verify buffers are the same size
+		if (Buffer1.length() != Buffer2.length()) {
+			System.out.println("Buffers are not the same size for Hamming Distance");
+			System.exit(1);
+		}
+		
+		// Create Return counter
+		int HammingDistance = 0;
+		int testByte;
+		// Convert to bytes for working with individual bytes
+		String Hex1 = ConvertPlaintextToHexString(Buffer1);
+		String Hex2 = ConvertPlaintextToHexString(Buffer2);
+		
+		
+		// A XOR operation will reveal all bits where the two strings are not the same
+		// XOR is only 1, if they both are not 1
+		String HammingTest = FixedXOR(Hex1, Hex2);
+		
+		// Convert to a byte array for direct comparison
+		byte[] HammingBytes = null;
+		try {
+			HammingBytes = Hex.decodeHex(HammingTest);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception occured in decoding hex string:");
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		// Iterate through the bytes
+		for(int i = 0; i< HammingBytes.length; i++) {
+			testByte = HammingBytes[i];
+			
+			//Iterate through the bits
+			for(int j = 0; j < 7; j++) {
+				
+				// Compares to single bit enabled (i.e. 1) and adds result if equal to 1
+				HammingDistance += testByte & 1;
+				testByte = testByte >> 1;
+			}
+		}
+		
+		return HammingDistance;
+	}
 
 
 }
