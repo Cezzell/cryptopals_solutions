@@ -1,6 +1,6 @@
 package cryptopals_solutions;
 import java.util.*;
-import java.util.Base64.Encoder;
+import java.util.Base64.*;
 
 import org.apache.commons.codec.binary.Hex;
 
@@ -71,6 +71,19 @@ public class CryptoToolFunctions {
 		// Encode to Base64 and return
 		String B64Encoded = Base64.getEncoder().encodeToString(DecodedBytes);
 		return B64Encoded;
+	}
+	
+	public static String Base64ToHex(String Base64Ciphertext) throws Exception{
+		
+		// Use Decoder to decode to regular ciphertext
+		byte[] Ciphertext = Base64.getDecoder().decode(Base64Ciphertext);
+		
+		// Convert the Ciphertext to a hex string of the ciphertext
+		String HexCiphertext = ConvertBytesToHex(Ciphertext);
+		
+		// Return Hex String of ciphertext
+		return HexCiphertext;
+		
 	}
 	
 	public static String FixedXOR(String Buffer1, String Buffer2) throws Exception {
@@ -237,7 +250,7 @@ public class CryptoToolFunctions {
 		for(int i = 0; i< HammingBytes.length; i++) {
 			testByte = HammingBytes[i];
 			
-			//Iterate through the bits
+			// Iterate through the bits
 			for(int j = 0; j < 7; j++) {
 				
 				// Compares to single bit enabled (i.e. 1) and adds result if equal to 1
@@ -246,6 +259,7 @@ public class CryptoToolFunctions {
 			}
 		}
 		
+		// Return counter with Hamming Distance
 		return HammingDistance;
 	}
 

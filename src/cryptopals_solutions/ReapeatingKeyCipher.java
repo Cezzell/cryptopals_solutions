@@ -1,11 +1,14 @@
 package cryptopals_solutions;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+
 public class ReapeatingKeyCipher {
 
 	public static CryptoToolFunctions Tools;
 	
 	public static void main(String[] args) throws Exception{
-
+/***
 		String Plaintext = "Burning 'em, if you ain't quick and nimble\n"
 				+ "I go crazy when I hear a cymbal";
 		byte[] Key = new byte[3];
@@ -23,6 +26,10 @@ public class ReapeatingKeyCipher {
 		if (Ciphertext.equals(CiphertextTest)) {
 			System.out.println("Cipher matches.");
 		}
+***/
+		
+		BufferedReader Reader = new BufferedReader( new FileReader("/Users/ezzel/eclipse-workspace/cryptopals_solutions/src/RepeatingKeyCiphers.txt"));
+		
 	}
 	
 	
@@ -41,4 +48,32 @@ public class ReapeatingKeyCipher {
 		return CipherText;
  	}
 	
+	public static String BreakRepeatingKeyCipher(String Base64Ciphertext) throws Exception {
+		
+		// Work through Keysizes between 2 and size of line
+		int keysize;
+		int MinHammingDistance = 1500000000;
+		String HexCiphertext = Tools.Base64ToHex(Base64Ciphertext);
+		String Ciphertext = Tools.ConvertHexStringToPlaintext(HexCiphertext);
+		int[] KeySizeHammingScores = new int[40];
+		
+		for(keysize = 2; keysize < 40; keysize++) {
+			// Cut the start of the string into smaller pieces of size keySize
+			String Cipher1 = Ciphertext.substring(0, keysize);
+			String Cipher2 = Ciphertext.substring(keysize,2*keysize);
+			
+			KeySizeHammingScores[keysize] = Tools.ComputeHammingDistance(Cipher1,Cipher2)/keysize;
+		}
+		
+		for(int i = 2; i<40; i++) {
+			if (KeySizeHammingScores[i]<MinHammingDistance) {
+				MinHammingDistance = KeySizeHammingScores[i];
+				keysize = i;
+			}
+		}
+		
+		System.out.println("Smallest Hamming Distance is keysize: " +keysize);
+		return HexCiphertext;
+		
+	}
 }

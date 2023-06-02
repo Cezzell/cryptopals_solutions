@@ -63,7 +63,6 @@ class CryptoToolFunctions_Tests {
 		String Buffer2 = "wokka wokka!!!";
 		int HammingDistance;
 		HammingDistance = Tools.ComputeHammingDistance(Buffer1, Buffer2);
-		
 		System.out.println("Calculated Hamming Distance: " + HammingDistance);
 		assertEquals(HammingDistance, 37);
 		
