@@ -1,7 +1,7 @@
 package cryptopals_solutions;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 
 public class ReapeatingKeyCipher {
 
@@ -27,11 +27,48 @@ public class ReapeatingKeyCipher {
 			System.out.println("Cipher matches.");
 		}
 ***/
+		// May need to be changed for file size.
+		BufferedReader Reader = new BufferedReader(new FileReader("/Users/ezzel/eclipse-workspace/cryptopals_solutions/src/RepeatingKeyCiphers.txt"));
+		String FullFile = "";
+		String BytePositionString = "";
+		String FullPlaintext = "";
+		byte keyByte;
 		
-		BufferedReader Reader = new BufferedReader( new FileReader("/Users/ezzel/eclipse-workspace/cryptopals_solutions/src/RepeatingKeyCiphers.txt"));
+		while(Reader.ready()) {
+			FullFile = FullFile.concat(Reader.readLine());
+		}
 		
+		int keysize = BreakRepeatingKeyCipherKeySize(FullFile);
+		byte[] Key = new byte[keysize];
+		
+		// For each byte in key, create string
+		for(int i = 0; i < keysize; i++) {
+			BytePositionString = CreateStringByKeyPosition(keysize, i, FullFile);
+			keyByte = SingleByteCipher.SolveSingleCipherReturnKey(BytePositionString);
+			Key[i] = keyByte;
+		}
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/ezzel/eclipse-workspace/cryptopals_solutions/src/SolvedRepeatingKeyCiphers.txt"));
 	}
 	
+	public static String CreateStringByKeyPosition(int keysize, int position, String Ciphertext) {
+		
+		int counter = 0;
+		String KeyPositionComposite = "";
+		
+		for(int i = 0; i < Ciphertext.length(); i++)
+		{
+			if(counter == position) {
+				KeyPositionComposite.concat(Ciphertext.substring(i,i+1));
+			}
+			counter++;
+			if(counter == keysize) {
+				counter = 0;
+			}
+		}
+		
+		return KeyPositionComposite;
+	}
 	
 	public static String EncryptWithRepeatingKey(String Plaintext, byte[] Key) throws Exception {
 		
@@ -48,7 +85,7 @@ public class ReapeatingKeyCipher {
 		return CipherText;
  	}
 	
-	public static String BreakRepeatingKeyCipher(String Base64Ciphertext) throws Exception {
+	public static int BreakRepeatingKeyCipherKeySize(String Base64Ciphertext) throws Exception {
 		
 		// Work through Keysizes between 2 and size of line
 		int keysize;
@@ -73,7 +110,7 @@ public class ReapeatingKeyCipher {
 		}
 		
 		System.out.println("Smallest Hamming Distance is keysize: " +keysize);
-		return HexCiphertext;
+		return keysize;
 		
 	}
 }

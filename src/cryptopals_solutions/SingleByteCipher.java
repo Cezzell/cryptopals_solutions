@@ -19,7 +19,40 @@ public class SingleByteCipher {
 		//DetectSingleKeyCipherFromFile();
 	}
 	
-	public static String SolveSingleCipher(String Ciphertext) throws Exception {
+	public static byte SolveSingleCipherReturnKey(String Ciphertext) throws Exception {
+		
+		int length = Ciphertext.length();
+		length = length/2;
+		
+		int maxScore = 0;
+		int maxIndex = 0;
+		int currentScore;
+		
+		String KeyString;
+		String Plaintext;
+		
+		byte[] keys = new byte[256];
+		
+		for(Integer i = 0; i < 256; i++) {
+			keys[i] = i.byteValue();
+		}
+		
+		for(int j = 0; j< 256; j++) {
+			KeyString = Tools.CreateSingleKeyHexString(keys[j], length);
+			Plaintext = Tools.FixedXOR(KeyString, Ciphertext);
+			Plaintext = Tools.ConvertHexStringToPlaintext(Plaintext);
+			currentScore = Tools.PlaintextFrequencyScore(Plaintext);
+			
+			if(currentScore > maxScore) {
+				maxScore = currentScore;
+				maxIndex = j;
+			}
+		}
+		
+		 return keys[maxIndex];
+	}
+	
+public static String SolveSingleCipher(String Ciphertext) throws Exception {
 		
 		int length = Ciphertext.length();
 		length = length/2;
