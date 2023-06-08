@@ -44,10 +44,12 @@ public class ReapeatingKeyCipher {
 		// For each byte in key, create string
 		for(int i = 0; i < keysize; i++) {
 			BytePositionString = CreateStringByKeyPosition(keysize, i, FullFile);
+			System.out.println(BytePositionString);
 			keyByte = SingleByteCipher.SolveSingleCipherReturnKey(BytePositionString);
 			Key[i] = keyByte;
 		}
 		
+		System.out.println(Tools.ConvertBytesToHex(Key));
 		BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/ezzel/eclipse-workspace/cryptopals_solutions/src/SolvedRepeatingKeyCiphers.txt"));
 	}
 	

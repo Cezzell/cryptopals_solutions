@@ -12,7 +12,7 @@ public class CryptoToolFunctions {
 	 * 
 	 * Src: https://en.wikipedia.org/wiki/Letter_frequency
 	 * 
-	 * Space value was increased until correct plaintext was found
+	 * Space value was adjusted until correct plaintext was found in test
 	 */
 	private static final HashMap<Character,Integer> FrequencyMap;
 		static {
@@ -52,8 +52,15 @@ public class CryptoToolFunctions {
 			Hex = new Hex();
 		}
 	
-	public static String HexToBase64(String hex) throws Exception {
 		
+	/***
+	 * Uses a hex decoder to convert from Hexadecimal string to Base64 encoded string
+	 * 
+	 * @param hex hex string
+	 * @return Base64 encoded text
+	 * @throws Exception hex decoding errors, i.e. non hex strings
+	 */
+	public static String HexToBase64(String hex) throws Exception {
 		// Prepare byte array for processing
 		byte[] DecodedBytes = null;
 		
@@ -72,7 +79,13 @@ public class CryptoToolFunctions {
 		String B64Encoded = Base64.getEncoder().encodeToString(DecodedBytes);
 		return B64Encoded;
 	}
-	
+	/***
+	 * Decodes Base64 encoded text and converts it to a hexadecimal string
+	 * 
+	 * @param Base64Ciphertext
+	 * @return hex string of ciphertext
+	 * @throws Exception catches decoder errors
+	 */
 	public static String Base64ToHex(String Base64Ciphertext) throws Exception{
 		
 		// Use Decoder to decode to regular ciphertext
@@ -86,6 +99,14 @@ public class CryptoToolFunctions {
 		
 	}
 	
+	/***
+	 * Takes two hex strings of equal length and runs an exclusive OR on the bits of each
+	 * 
+	 * @param Buffer1
+	 * @param Buffer2
+	 * @return
+	 * @throws Exception
+	 */
 	public static String FixedXOR(String Buffer1, String Buffer2) throws Exception {
 		
 		// Prepare byte arrays for processing String inputs
@@ -117,6 +138,11 @@ public class CryptoToolFunctions {
 		return answer;
 	}
 	
+	/***
+	 * Uses the frequency scoring HashMap to decide whether a decoded plaintext is likely to be correct.
+	 * @param Plaintext
+	 * @return
+	 */
 	public static int PlaintextFrequencyScore(String Plaintext) {
 		
 		// Initialize counters and placeholder variables
@@ -140,6 +166,13 @@ public class CryptoToolFunctions {
 		return TotalValue;
 	}
 	
+	/***
+	 * Takes a single byte and produces a hex string with the key repeated a number of times equal to length.
+	 * 
+	 * @param key
+	 * @param length
+	 * @return
+	 */
 	public static String CreateSingleKeyHexString(byte key, int length) {
 		
 		// Create character Array for creating strings of characters
@@ -156,6 +189,12 @@ public class CryptoToolFunctions {
 		return KeyString;	
 	}
 	
+	/***
+	 * Accepts a key as a byte array, extends and repeats the key into a key string with length given.
+	 * @param keyBytes
+	 * @param length
+	 * @return
+	 */
 	public static String CreateRepeatingKeyHexString(byte[] keyBytes, int length) {
 		
 		// Determine length of Key
@@ -181,6 +220,11 @@ public class CryptoToolFunctions {
 		return keyString;
 	}
 	
+	/***
+	 * Takes a byte array and converts it to a hex string
+	 * @param bytes
+	 * @return
+	 */
 	public static String ConvertBytesToHex(byte[] bytes) {
 		
 		// Convert an array of bytes to a hex string and returns
@@ -188,6 +232,12 @@ public class CryptoToolFunctions {
 		return HexString;
 	}
 	
+	/***
+	 * Takes a hexstring and decodes it to the plaintext ascii representation.
+	 * @param HexString
+	 * @return
+	 * @throws Exception
+	 */
 	public static String ConvertHexStringToPlaintext(String HexString) throws Exception {
 		
 		byte[] PlainBytes = new byte[HexString.length()];
@@ -206,6 +256,12 @@ public class CryptoToolFunctions {
 		return Plaintext;
 	}
 	
+	/***
+	 * Takes an ascii string and converts to a hex string.
+	 * @param Plaintext
+	 * @return
+	 * @throws Exception
+	 */
 	public static String ConvertPlaintextToHexString(String Plaintext) throws Exception{
 		
 		byte [] plainBytes = Plaintext.getBytes();
@@ -214,6 +270,13 @@ public class CryptoToolFunctions {
 		return HexString;
 	}
 	
+	/***
+	 * Takes two ascii strings and counts the individual bytes different between the two strings.
+	 * @param Buffer1
+	 * @param Buffer2
+	 * @return
+	 * @throws Exception
+	 */
 	public static int ComputeHammingDistance(String Buffer1, String Buffer2) throws Exception {
 		
 		// Verify buffers are the same size
