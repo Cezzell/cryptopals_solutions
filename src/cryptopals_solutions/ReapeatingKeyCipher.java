@@ -27,30 +27,47 @@ public class ReapeatingKeyCipher {
 			System.out.println("Cipher matches.");
 		}
 ***/
-		// May need to be changed for file size.
+		// Create Reader for pulling from file
 		BufferedReader Reader = new BufferedReader(new FileReader("/Users/ezzel/eclipse-workspace/cryptopals_solutions/src/RepeatingKeyCiphers.txt"));
 		String FullFile = "";
 		String BytePositionString = "";
-		String FullPlaintext = "";
 		byte keyByte;
+		String Line = "";
+		String KeyFile = "";
+		String DecodedText = "";
 		
-		while(Reader.ready()) {
-			FullFile = FullFile.concat(Reader.readLine());
+		// Read in the first three lines of the file for finding Keysize
+		while((Line = Reader.readLine()) != null) {
+			FullFile = FullFile.concat(Line);		
 		}
 		
-		int keysize = BreakRepeatingKeyCipherKeySize(FullFile);
+		String HexCiphertext = Tools.Base64ToHex(FullFile);
+		String Ciphertext = Tools.ConvertHexStringToPlaintext(HexCiphertext);
+
+		// Compute average Hamming distance for the different keysizes
+		int keysize = BreakRepeatingKeyCipherKeySize(Ciphertext);
 		byte[] Key = new byte[keysize];
 		
 		// For each byte in key, create string
 		for(int i = 0; i < keysize; i++) {
-			BytePositionString = CreateStringByKeyPosition(keysize, i, FullFile);
-			System.out.println(BytePositionString);
+			BytePositionString = CreateStringByKeyPosition(keysize, i, Ciphertext);
+			BytePositionString = Tools.ConvertPlaintextToHexString(BytePositionString);
 			keyByte = SingleByteCipher.SolveSingleCipherReturnKey(BytePositionString);
 			Key[i] = keyByte;
 		}
 		
 		System.out.println(Tools.ConvertBytesToHex(Key));
 		BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/ezzel/eclipse-workspace/cryptopals_solutions/src/SolvedRepeatingKeyCiphers.txt"));
+		KeyFile = Tools.CreateRepeatingKeyHexString(Key, HexCiphertext.length());
+		
+		DecodedText = Tools.FixedXOR(HexCiphertext, KeyFile);
+		DecodedText = Tools.ConvertHexStringToPlaintext(DecodedText);
+		System.out.println(DecodedText);
+		writer.write(DecodedText);
+		writer.flush();
+		writer.close();
+		Reader.close();
+		
 	}
 	
 	public static String CreateStringByKeyPosition(int keysize, int position, String Ciphertext) {
@@ -61,7 +78,7 @@ public class ReapeatingKeyCipher {
 		for(int i = 0; i < Ciphertext.length(); i++)
 		{
 			if(counter == position) {
-				KeyPositionComposite.concat(Ciphertext.substring(i,i+1));
+				KeyPositionComposite = KeyPositionComposite.concat(Ciphertext.substring(i,i+1));
 			}
 			counter++;
 			if(counter == keysize) {
@@ -87,25 +104,38 @@ public class ReapeatingKeyCipher {
 		return CipherText;
  	}
 	
-	public static int BreakRepeatingKeyCipherKeySize(String Base64Ciphertext) throws Exception {
+	
+	public static int BreakRepeatingKeyCipherKeySize(String Ciphertext) throws Exception {
 		
-		// Work through Keysizes between 2 and size of line
+		// Work through Keysizes between 2 and 40
 		int keysize;
-		int MinHammingDistance = 1500000000;
-		String HexCiphertext = Tools.Base64ToHex(Base64Ciphertext);
-		String Ciphertext = Tools.ConvertHexStringToPlaintext(HexCiphertext);
-		int[] KeySizeHammingScores = new int[40];
+		double MinHammingDistance = 1500000000;
+		double[] KeySizeHammingScores = new double[40];
+		double CummulativeDistance = 0;
 		
 		for(keysize = 2; keysize < 40; keysize++) {
+			// Reset the Distance counter
+			CummulativeDistance = 0;
 			// Cut the start of the string into smaller pieces of size keySize
 			String Cipher1 = Ciphertext.substring(0, keysize);
 			String Cipher2 = Ciphertext.substring(keysize,2*keysize);
+			String Cipher3 = Ciphertext.substring(2*keysize,3*keysize);
+			String Cipher4 = Ciphertext.substring(3*keysize,4*keysize);
 			
-			KeySizeHammingScores[keysize] = Tools.ComputeHammingDistance(Cipher1,Cipher2)/keysize;
+			
+			CummulativeDistance+= Tools.ComputeHammingDistance(Cipher1, Cipher2)/(keysize);
+			CummulativeDistance+= Tools.ComputeHammingDistance(Cipher2, Cipher3)/(keysize);
+			CummulativeDistance+= Tools.ComputeHammingDistance(Cipher1, Cipher3)/(keysize);
+			CummulativeDistance+= Tools.ComputeHammingDistance(Cipher1, Cipher4)/(keysize);
+			CummulativeDistance+= Tools.ComputeHammingDistance(Cipher2, Cipher4)/(keysize);
+			CummulativeDistance+= Tools.ComputeHammingDistance(Cipher3, Cipher4)/(keysize);
+			
+			KeySizeHammingScores[keysize] = CummulativeDistance/6;
 		}
 		
 		for(int i = 2; i<40; i++) {
-			if (KeySizeHammingScores[i]<MinHammingDistance) {
+			System.out.println(KeySizeHammingScores[i]);
+			if (KeySizeHammingScores[i] < MinHammingDistance) {
 				MinHammingDistance = KeySizeHammingScores[i];
 				keysize = i;
 			}
